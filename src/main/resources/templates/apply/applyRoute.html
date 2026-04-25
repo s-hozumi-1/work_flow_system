@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{parts/common :: html_head}"></head>
+<body>
+	<div class="header-wrapper">
+		<header th:replace="~{parts/common :: page_header}"></header>
+	</div>
+	<div class="container">
+		<div class="row">
+<form action="" th:object="${approvalRoute}" method="post" class="col-md-12">
+
+  <div class="row text-center mb-2">
+    <div class="col">管理番号</div>
+    <div class="col">申請内容</div>
+    <div class="col">申請パターン</div>
+    <div class="col">第一承認者</div>
+    <div class="col">第二承認者</div>
+    <div class="col">第三承認者</div>
+  </div>
+
+  <div class="row text-center">
+    <div class="col">
+      <input type="text" th:field="*{managementNumber}" id="formManagementNumber" class="form-control border-line" placeholder="管理番号" />
+    </div>
+    <div class="col">
+      <select th:field="*{detail.code}" id="formDetail" class="form-control custom-select border-line">
+        <option value="">選択してください</option>
+        <option th:each="d : ${detailList}" th:value="${d.code}" th:text="${d.name}"></option>
+      </select>
+    </div>
+    <div class="col">
+      <select th:field="*{approval.code}" id="formApproval" class="form-control custom-select border-line">
+        <option value="">選択してください</option>
+        <option th:each="p : ${pattenList}" th:value="${p.code}" th:text="${p.name}"></option>
+      </select>
+    </div>
+    <div class="col">
+      <select th:field="*{approverNo1.employeeNumber}" id="formApproverNo1" class="form-control custom-select border-line">
+        <option value="">選択してください</option>
+        <option th:each="no1 : ${approverNo1List}" th:value="${no1.employeeNumber}" th:text="${no1.name}"></option>
+      </select>
+    </div>
+    <div class="col">
+      <select th:field="*{approverNo2.employeeNumber}" id="formApproverNo2" class="form-control custom-select border-line">
+        <option value="">選択してください</option>
+        <option th:each="no2 : ${approverNo2List}" th:value="${no2.employeeNumber}" th:text="${no2.name}"></option>
+      </select>
+    </div>
+    <div class="col">
+      <select th:field="*{approverNo3.employeeNumber}" id="formApproverNo3" class="form-control custom-select border-line">
+        <option value="">選択してください</option>
+        <option th:each="no3 : ${approverNo3List}" th:value="${no3.employeeNumber}" th:text="${no3.name}"></option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group text-end mt-4">
+    <input type="submit"
+							class="btn btn-dark" value="新規登録" />
+							<input type="submit"
+							class="btn btn-dark" value="変更" />
+							<input type="submit"
+							class="btn btn-dark" value="削除" />
+							<a th:href="@{/apply(page=${session.applyPage})}"
+							class="btn btn-dark">キャンセル</a> 
+  </div>
+
+</form>
+		</div>
+	</div>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>

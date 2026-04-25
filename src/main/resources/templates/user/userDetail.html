@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{parts/common :: html_head}"></head>
+<body>
+	<div class="header-wrapper">
+		<header th:replace="~{parts/common :: page_header}"></header>
+	</div>
+	<div class="container">
+		<h1>[[${title}]]</h1>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table bordered table-hover list-table">
+					<thead>
+						<tr class="align-middle">
+							<th>ID</th>
+							<td>[[${user.employeeNumber}]]</td>
+						<tr />
+						<tr>
+							<th>氏名</th>
+							<td>[[${user.name}]]</td>
+						<tr />
+						<tr>
+							<th>ログインID</th>
+							<td>[[${user.loginId}]]</td>
+						<tr>
+							<th>所属グループ</th>
+							<td>[[${user.department}]]</td>
+						</tr>
+						<tr>
+							<th>支店</th>
+							<td>[[${user.branch}]]</td>
+						</tr>
+					</thead>
+
+				</table>
+			</div>
+		</div>
+		<a class="btn btn-dark" th:href="@{/user(page=${session.userPage})}">一覧に戻る</a>
+		<a class="btn btn-dark"
+			th:href="@{/user/edit/{employeeNumber}(employeeNumber=${user.employeeNumber})}">編集</a>
+		<button type="button" class="btn btn-dark" data-bs-toggle="modal"
+			data-bs-target="#exampleModal">削除</button>
+					<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      	<p>本当に削除してよろしいですか？</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+		        <form th:action="@{/user/delete/{index}(index=${user.employeeNumber})}" method="post">
+		        <input type="submit" value="OK" class="btn btn-dark" id="deleteButton" >
+		        </form>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+	</div>
+	</div>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
