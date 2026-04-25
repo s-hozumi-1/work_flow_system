@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{parts/common :: html_head}"></head>
+<body>
+<div class="header-wrapper">
+	<header th:replace="~{parts/common :: page_header}"></header>	
+	</div>
+	<div class="container">
+		<h1>ユーザ削除</h1>
+		<p>削除しました。</p>
+		<p><a th:href="@{/user(page=${session.userPage})}">ユーザ一覧に戻る</a><p>
+	</div>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

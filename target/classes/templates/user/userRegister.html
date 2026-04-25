@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{parts/common :: html_head}"></head>
+<body>
+	<div class="header-wrapper">
+	<header th:replace="~{parts/common :: page_header}"></header>	
+	</div>
+    <div class="container">
+        <h1>ユーザ登録</h1>
+        <div class="row">
+            <div class="row">
+                <form action="" th:object="${user}" method="post" class="col-md-12">
+                    <div class="form-group mb-3">
+						                       <div th:if="${#fields.hasErrors('employeeNumber')}" class="alert alert-danger" role="alert">
+                            <span th:errors="*{employeeNumber}" class="error"></span>
+                        </div>
+                        <label>社員番号(必須)</label>
+                        <input type="text" th:field="*{employeeNumber}" id="formName" class="form-control border-line" placeholder="社員番号"/>
+                    </div>
+                    <div class="form-group mb-3">
+                       <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger" role="alert">
+                            <span th:errors="*{name}" class="error"></span>
+                        </div>
+                        <label>氏名(必須)</label>
+                        <input type="text" th:field="*{name}" id="formName" class="form-control border-line" placeholder="氏名"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <div th:if="${#fields.hasErrors('loginId')}" class="alert alert-danger" role="alert">
+                            <span th:errors="*{loginId}" class="error"></span>
+                        </div>
+                        <label>ログインID(必須)</label>
+                        <input type="text" th:field="*{loginId}" id="formLoginId" class="form-control border-line" placeholder="ログインID"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger" role="alert">
+                            <span th:errors="*{password}" class="error"></span>
+                        </div>
+                        <label>パスワード(必須)</label>
+                        <input type="password" th:field="*{password}" id="formPassword" class="form-control border-line" placeholder="パスワード"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>ユーザ種別(必須)</label>
+                        <select th:field="*{userType.code}" id="formUserType" class="form-control custom-select border-line">
+                            <option th:each="t : ${userTypeList}" th:value="${t.code}" th:text="${t.name}"></option>                
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>所属グループ(必須)</label>
+                        <select th:field="*{department.code}" id="formDepartmentId" class="form-control custom-select border-line">
+                            <option th:each="d,depStat: ${departmentList}" th:value="${d.code}" th:text="${d.name}"th:if="${depStat.index < 3}"></option>
+                        </select>
+                    </div>
+                                        <div class="form-group mb-3">
+                        <label>支店(必須)</label>
+                        <select th:field="*{branch.code}" id="formbranchId" class="form-control custom-select border-line">
+                            <option th:each="b,brnStat: ${branchList}" th:value="${b.code}" th:text="${b.name}"th:if="${brnStat.index < 3}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <a th:href="@{/user(page=${session.userPage})}"  class="btn btn-dark">キャンセル</a>
+                        <input type="submit" class="btn btn-dark" value="登録" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

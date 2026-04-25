@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{parts/common :: html_head}"></head>
+<body>
+	<div class="header-wrapper">
+		<header th:replace="~{parts/common :: page_header}"></header>
+	</div>
+	<div class="container">
+		<h1>ユーザ編集</h1>
+		<div class="row">
+			<div class="col-md-12">
+				<form action="" method="post" th:object="${user}">
+
+					<div class="alert alert-danger" th:errors="*{name}"></div>
+					<div class="form-group mb-3">
+						<label for="formName">氏名(必須)</label> <input type="text"
+							th:field="*{name}" id="formName" class="form-control border-line" />
+					</div>
+
+					<div class="alert alert-danger" th:errors="*{loginId}"></div>
+					<div class="form-group mb-3">
+						<label for="formLoginId">ログインID(必須)</label> <input
+							th:field="*{loginId}" th:placeholder="ログインID"
+							id="formLoginId" class="form-control border-line" />
+					</div>
+					<div class="form-group mb-3">
+						<label for="formPassword">パスワード(変更の場合のみ)</label> <input
+							type="password" th:field="*{password}" placeholder="パスワード"
+							id="formPassword" class="form-control  border-line" />
+					</div>
+
+					<div class="form-group mb-3">
+						<label>ユーザ種別(必須)</label> <select th:field="*{userType.code}"
+							id="formUserType" class="form-control custom-select border-line">
+							<option th:each="t : ${userTypeList}" th:value="${t.code}"
+								th:text="${t.name}"></option>
+						</select>
+					</div>
+					<div class="form-group mb-3">
+						<label>所属グループ(必須)</label> <select th:field="*{department.code}"
+							id="formDepartmentId"
+							class="form-control custom-select border-line">
+							<option th:each="d,depStat: ${departmentList}"
+								th:value="${d.code}" th:text="${d.name}"
+								th:if="${depStat.index < 3}"></option>
+						</select>
+					</div>
+					<div class="form-group mb-3">
+						<label>支店(必須)</label> <select th:field="*{branch.code}"
+							id="formbranchId" class="form-control custom-select border-line">
+							<option th:each="b,brnStat: ${branchList}" th:value="${b.code}"
+								th:text="${b.name}" th:if="${brnStat.index < 3}"></option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<a
+							th:href="@{/user/detail/{employeeNumber}(employeeNumber=${user.employeeNumber})}"
+							class="btn btn-dark">キャンセル</a> <input type="submit"
+							class="btn btn-dark" value="保存" />
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</div>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
