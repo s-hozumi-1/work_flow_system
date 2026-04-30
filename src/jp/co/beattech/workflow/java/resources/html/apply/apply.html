@@ -1,72 +1,78 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{parts/common :: html_head}"></head>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>申請一覧</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
 <body>
-	<div class="header-wrapper">
-		<header th:replace="~{parts/common :: page_header}"></header>
+
+<div class="container mt-4">
+
+	<!-- ヘッダー -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h2>申請一覧</h2>
+	<a th:href="@{/logout}" class="logout-link">ログアウト</a>
+</div>
+
+	<!-- ページネーション -->
+	<nav>
+		<ul class="pagination">
+			<li class="page-item"><a class="page-link" href="#">«</a></li>
+			<li class="page-item active"><a class="page-link" href="#">1</a></li>
+			<li class="page-item"><a class="page-link" href="#">2</a></li>
+			<li class="page-item"><a class="page-link" href="#">3</a></li>
+			<li class="page-item"><a class="page-link" href="#">»</a></li>
+		</ul>
+	</nav>
+
+	<!-- テーブル（ダミーデータ） -->
+	<table class="table table-bordered table-hover align-middle">
+		<thead class="table-light">
+			<tr>
+				<th>申請内容</th>
+				<th>申請日時</th>
+				<th>承認期日</th>
+				<th>申請者</th>
+				<th>申請状況</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>備品購入申請</td>
+				<td>2026年12月12日(金) 19時00分</td>
+				<td>2026年12月13日(土)</td>
+				<td>技術部</td>
+				<td>申請中</td>
+			</tr>
+
+			<tr>
+				<td>出張申請</td>
+				<td>2026年12月11日(木) 18時30分</td>
+				<td>2026年12月24日(月)</td>
+				<td>営業部</td>
+				<td>承認済</td>
+			</tr>
+
+			<tr>
+				<td>備品修理申請</td>
+				<td>2026年12月10日(水) 15時10分</td>
+				<td>2026年12月12日(金)</td>
+				<td>総務部</td>
+				<td>却下</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- ボタン -->
+	<div class="mt-3">
+		<a href="#" class="btn btn-secondary me-2">申請登録</a>
+		<a href="#" class="btn btn-secondary">承認画面</a>
 	</div>
-	<div class="container">
-		<h1 class="mb-4">[[${title}]]</h1>
-		<!-- 2 ページ以上の場合、ページネーションを表示:start -->
-		<div th:if="${totalPages >= 2}">
-			<ul class="pagination">
-				<!-- 前のページへ -->
-				<th:block th:switch="${page}">
-					<li th:case="1" class="page-item disabled"><a
-						class="page-link page-next" href="">&laquo;</a></li>
-					<li th:case="*" class="page-item"><a class="page-link page-next"
-						th:href="@{/apply(page=${page - 1})}">&laquo;</a></li>
-				</th:block>
-				<!-- ページ番号 -->
-				<th:block th:each="index : ${#numbers.sequence(1, totalPages)}">
-					<th:block th:switch="${index}" >
-						<li th:case="${page}" class="page-item active page-border"><a
-							class="page-link" href="">[[${index}]]</a></li>
-						<li th:case="*" class="page-item page-border"><a class="page-link"
-							th:href="@{/apply(page=${index})}">[[${index}]]</a></li>
-					</th:block>
-				</th:block>
-				<!-- 次のページへ -->
-				<th:block th:switch="${page}">
-					<li th:case="${totalPages}" class="page-item disabled"><a
-						class="page-link page-next" href="">&raquo;</a></li>
-					<li th:case="*" class="page-item"><a class="page-link page-next"
-						th:href="@{/apply(page=${page + 1})}">&raquo;</a></li>
-				</th:block>
-			</ul>
-		</div>
-		<!-- 2 ページ以上の場合、ページネーションを表示:end -->
-		<div class="row">
-			<div class="col-md-12">
-				<table class="table bordered table-hover list-table ">
-					<thead>
-						<tr class="align-middle">
-							<th>申請内容</th>
-							<th>申請日時</th>
-							<th>承認期日</th>
-							<th>申請者</th>
-							<th>申請状況</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr class="align-middle" th:each="a:${applyInfo}">
-							<td>[[${a.applicationDetail}]]</td>
-							<td>[[${#temporals.format(a.applicationDate, 'yyyy年MM月dd日 (E) hh時mm分', 'Asia/Tokyo')}]]</td>
-							<td>[[${#temporals.format(a.approvalDate, 'yyyy年MM月dd日 (E)', 'Asia/Tokyo')}]]</td>
-							<td>[[${a.applicationName}]]</td>
-							<td>[[${a.applicationStatus}]]</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div>
-			<a class="btn btn-dark"
-				th:href="@{/apply/register}">申請の登録</a>
-							<a class="btn btn-dark"
-				th:href="@{/unapproved}">承認画面</a>
-		</div>
-	</div>
-	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+</div>
+
 </body>
 </html>
