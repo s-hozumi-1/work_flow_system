@@ -8,7 +8,7 @@
 		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>jp.co.beattech.workflow.java</groupId>
 	<artifactId>work_flow_system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>work_flow_system</name>

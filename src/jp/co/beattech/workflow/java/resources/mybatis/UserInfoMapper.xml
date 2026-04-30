@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.beattech.workflow.java.app.mapper.UserInfoMapper">
+
+	<sql id="selectUserInfoAll">
+		SELECT * FROM view_user_info
+	</sql>
+
+	<resultMap id="UserInfoMap"
+		type="jp.co.beattech.workflow.java.app.domain.UserInfo">
+		<id column="employee_number" property="employeeNumber" />
+		<result column="login_id" property="loginId" />
+		<result column="password" property="password" />
+		<result column="name" property="name" />
+		<result column="user_cd" property="userCd" />
+		<result column="user_type" property="userType" />
+		<result column="department_cd" property="departmentCd" />
+		<result column="department" property="department" />
+		<result column="branch_cd" property="branchCd" />
+		<result column="branch" property="branch" />
+		<result column="level" property="level" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="UserInfoMap">
+		<include refid="selectUserInfoAll"></include>
+		ORDER BY employee_number desc
+	</select>
+
+	<select id="selectByUserInfoEmployeeNumber" parameterType="Integer"
+		resultMap="UserInfoMap">
+		<include refid="selectUserInfoAll"></include>
+		WHERE employee_number = #{employeeNumber}
+	</select>
+
+	<select id="selectByLoginId" parameterType="String"
+		resultMap="UserInfoMap">
+		<include refid="selectUserInfoAll"></include>
+		WHERE login_id = #{loginId}
+	</select>
+
+	<select id="selectLimited" resultMap="UserInfoMap">
+		<include refid="selectUserInfoAll"></include>
+		ORDER BY view_user_info.employee_number desc
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM view_user_info
+	</select>
+
+</mapper> 
