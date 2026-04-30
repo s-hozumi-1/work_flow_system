@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(main, title)">
+<head th:fragment="html_head">
+<title>[[${title}]]</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+<header th:fragment="page_header">
+   <nav class="navbar bg-body-tertiary">
+  <div class="container-fluid nav navbar-white bg-white">
+    <a class="navbar-brand mb-0 h1" th:href="@{/apply}">Warfy</a>
+
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button"
+           data-bs-toggle="dropdown" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+               fill="currentColor" class="bi bi-person-fill"
+               viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+          </svg>
+          [[${session.name}]]
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" style="position: absolute;">
+        <li><a class="dropdown-item" href="/approval">承認ルート設定</a></li>
+        <li><a class="dropdown-item" href="/user">ユーザ管理</a></li>
+          <li><a class="dropdown-item" href="/logout">ログアウト</a></li>
+        </ul>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+</header>
+    <script th:src="@{js/bootstrap.bundle.min.js}"></script> 
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
