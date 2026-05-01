@@ -1,72 +1,149 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{parts/common :: html_head}"></head>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ユーザ一覧</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+
 <body>
-	<div class="header-wrapper">
-		<header th:replace="~{parts/common :: page_header}"></header>
-	</div>
-	<div class="container">
-		<h1 class="mb-4">[[${title}]]</h1>
-		<!-- 2 ページ以上の場合、ページネーションを表示:start -->
-		<div th:if="${totalPages >= 2}">
-			<ul class="pagination">
-				<!-- 前のページへ -->
-				<th:block th:switch="${page}">
-					<li th:case="1" class="page-item disabled"><a
-						class="page-link page-next" href="">&laquo;</a></li>
-					<li th:case="*" class="page-item"><a class="page-link page-next"
-						th:href="@{/user(page=${page - 1})}">&laquo;</a></li>
-				</th:block>
-				<!-- ページ番号 -->
-				<th:block th:each="index : ${#numbers.sequence(1, totalPages)}">
-					<th:block th:switch="${index}" >
-						<li th:case="${page}" class="page-item active page-border"><a
-							class="page-link" href="">[[${index}]]</a></li>
-						<li th:case="*" class="page-item page-border"><a class="page-link"
-							th:href="@{/user(page=${index})}">[[${index}]]</a></li>
-					</th:block>
-				</th:block>
-				<!-- 次のページへ -->
-				<th:block th:switch="${page}">
-					<li th:case="${totalPages}" class="page-item disabled"><a
-						class="page-link page-next" href="">&raquo;</a></li>
-					<li th:case="*" class="page-item"><a class="page-link page-next"
-						th:href="@{/user(page=${page + 1})}">&raquo;</a></li>
-				</th:block>
-			</ul>
-		</div>
-		<!-- 2 ページ以上の場合、ページネーションを表示:end -->
-		<div class="row">
-			<div class="col-md-12">
-				<table class="table bordered table-hover list-table ">
-					<thead>
-						<tr class="align-middle">
-							<th>社員番号</th>
-							<th>氏名</th>
-							<th>所属グループ</th>
-							<th>支店</th>
-							<th>詳細</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr class="align-middle" th:each="u:${userInfo}">
-							<td>[[${u.employeeNumber}]]</td>
-							<td>[[${u.name}]]</td>
-							<td>[[${u.department}]]</td>
-							<td>[[${u.branch}]]</td>
-							<td><a
-								class="btn btn-outline-dark w-75 py-0btn btn-outline-dark w-75 py-0"
-								th:href="@{/user/detail/{index}(index=${u.employeeNumber})}">詳細</a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div>
-			<a class="btn btn-dark"
-				th:href="@{/user/register}">ユーザの登録</a>
-		</div>
-	</div>
-	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<div class="container mt-4">
+
+<!-- ヘッダー -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h2>ユーザ一覧</h2>
+	<a href="../login/logout.html" class="logout-link">ログアウト</a>
+</div>
+
+<!-- ページネーション -->
+<nav>
+	<ul class="pagination" id="pagination"></ul>
+</nav>
+
+<!-- テーブル -->
+<table class="table table-bordered table-hover align-middle">
+	<thead class="table-light">
+		<tr>
+			<th>社員番号</th>
+			<th>氏名</th>
+			<th>所属グループ</th>
+			<th>詳細</th>
+		</tr>
+	</thead>
+	<tbody id="userTable"></tbody>
+</table>
+
+<!-- ボタン -->
+<div class="mt-3">
+	<a href="userRegister.html" class="btn btn-secondary me-2">ユーザの登録</a>
+</div>
+
+</div>
+
+<script>
+// ----------------------------
+// ダミーデータ
+// ----------------------------
+const users = [
+	{ employee_number: 105, name: "山田 太郎", login_id: "営業部" },
+	{ employee_number: 104, name: "佐藤 花子", login_id: "人事部" },
+	{ employee_number: 103, name: "鈴木 一郎", login_id: "開発部" },
+	{ employee_number: 102, name: "田中 次郎", login_id: "総務部" },
+	{ employee_number: 101, name: "高橋 三郎", login_id: "営業部" },
+	{ employee_number: 100, name: "伊藤 四郎", login_id: "人事部" },
+	{ employee_number: 99, name: "渡辺 五郎", login_id: "開発部" },
+	{ employee_number: 98, name: "小林 六郎", login_id: "営業部" },
+	{ employee_number: 97, name: "加藤 七郎", login_id: "総務部" },
+	{ employee_number: 96, name: "吉田 八郎", login_id: "人事部" },
+	{ employee_number: 95, name: "中村 九郎", login_id: "開発部" },
+	{ employee_number: 94, name: "山本 十郎", login_id: "営業部" },
+	{ employee_number: 93, name: "井上 十一", login_id: "人事部" }
+];
+
+// ----------------------------
+// 設定
+// ----------------------------
+const pageSize = 10;
+let currentPage = 1;
+
+// 社員番号 降順
+users.sort((a, b) => b.employee_number - a.employee_number);
+
+// ----------------------------
+// 描画
+// ----------------------------
+function renderTable() {
+	const tbody = document.getElementById("userTable");
+	tbody.innerHTML = "";
+
+	const start = (currentPage - 1) * pageSize;
+	const end = start + pageSize;
+
+	const pageData = users.slice(start, end);
+
+	pageData.forEach(user => {
+		tbody.innerHTML += `
+		<tr>
+			<td>${user.employee_number}</td>
+			<td>${user.name}</td>
+			<td>${user.login_id}</td>
+			<td><a href="userDetail.html?employee_number=${user.employee_number}">詳細</a></td>
+		</tr>
+		`;
+	});
+}
+
+// ----------------------------
+// ページネーション
+// ----------------------------
+function renderPagination() {
+	const pagination = document.getElementById("pagination");
+	pagination.innerHTML = "";
+
+	const totalPages = Math.ceil(users.length / pageSize);
+
+	// 前
+	pagination.innerHTML += `
+	<li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+		<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">«</a>
+	</li>`;
+
+	// 数字
+	for (let i = 1; i <= totalPages; i++) {
+		pagination.innerHTML += `
+		<li class="page-item ${i === currentPage ? "active" : ""}">
+			<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+		</li>`;
+	}
+
+	// 次
+	pagination.innerHTML += `
+	<li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+		<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">»</a>
+	</li>`;
+}
+
+// ----------------------------
+// ページ切替
+// ----------------------------
+function changePage(page) {
+	const totalPages = Math.ceil(users.length / pageSize);
+
+	if (page < 1 || page > totalPages) return;
+
+	currentPage = page;
+	renderTable();
+	renderPagination();
+}
+
+// 初期表示
+renderTable();
+renderPagination();
+
+</script>
+
 </body>
 </html>
