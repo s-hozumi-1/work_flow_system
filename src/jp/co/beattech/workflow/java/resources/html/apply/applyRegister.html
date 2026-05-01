@@ -1,97 +1,201 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{parts/common :: html_head}"></head>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>申請登録</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+
 <body>
-	<div class="header-wrapper">
-		<header th:replace="~{parts/common :: page_header}"></header>
+
+<div class="container mt-4">
+	<h2 class="mb-4">申請登録</h2>
+
+<form id="applyForm">
+
+	<!-- 申請内容 -->
+	<div class="mb-3">
+		<label>申請内容（必須）</label>
+		<select id="sinseinaiyou" class="form-select">
+			<option value="">選択してください</option>
+			<option value="1">営業経費申請</option>
+			<option value="2">有給申請</option>
+		</select>
+		<div class="invalid-feedback">申請内容を選択してください。</div>
 	</div>
-	<div class="container">
-		<h1>申請登録</h1>
-		<div class="row">
-			<div class="row">
-				<form th:action="@{/apply/confirm}" th:object="${apply}" method="post" class="col-md-12" enctype="multipart/form-data">
-					<div class="form-group mb-3">
-						<label>申請内容(必須)</label> <select th:field="*{detail.code}"
-							id="formDetail" class="form-control custom-select border-line">
-							<option th:each="d : ${detailList}" th:value="${d.code}"
-								th:text="${d.name}"></option>
-						</select>
-					</div>
-					<div class="form-group mb-3">
-						<label>経費種別(必須)</label> <select th:field="*{expense.code}"
-							id="formExpense" class="form-control custom-select border-line">
-							<option th:each="e : ${expenseList}" th:value="${e.code}"
-								th:text="${e.name}"></option>
-						</select>
-					</div>
-					<div class="form-group mb-3">
-						<div th:if="${#fields.hasErrors('usedDate')}"
-							class="alert alert-danger" role="alert">
-							<span th:errors="*{usedDate}" class="error"></span>
-						</div>
-						<label>使用日(必須)</label> <input type="text" th:field="*{usedDate}"
-							id="formUsedDate" class="form-control border-line"
-							placeholder="使用日" />
-					</div>
-					<div class="form-group mb-3">
-						<div th:if="${#fields.hasErrors('paymentAmount')}"
-							class="alert alert-danger" role="alert">
-							<span th:errors="*{paymentAmount}" class="error"></span>
-						</div>
-						<label>出金額(必須)</label> <input type="text"
-							th:field="*{paymentAmount}" id="formPaymentAmount"
-							class="form-control border-line" placeholder="出金額" />
-					</div>
-					<div class="form-group mb-3">
-						<div th:if="${#fields.hasErrors('usagePurpose')}"
-							class="alert alert-danger" role="alert">
-							<span th:errors="*{usagePurpose}" class="error"></span>
-						</div>
-						<label>使途・目的</label> <input type="text" th:field="*{usagePurpose}"
-							id="formUsagePurpose" class="form-control border-line"
-							placeholder="使途・目的" />
-					</div>
-					<div class="form-group mb-3">
-						<div th:if="${#fields.hasErrors('payeeName')}"
-							class="alert alert-danger" role="alert">
-							<span th:errors="*{payeeName}" class="error"></span>
-						</div>
-						<label>支払い先</label> <input type="text" th:field="*{payeeName}"
-							id="formPayeeName" class="form-control border-line"
-							placeholder="支払い先" />
-					</div>
-					<div class="form-group mb-3">
-						<div th:if="${#fields.hasErrors('approvalDate')}"
-							class="alert alert-danger" role="alert">
-							<span th:errors="*{approvalDate}" class="error"></span>
-						</div>
-						<label>承認締め日(必須)</label> <input type="text" th:field="*{approvalDate}"
-							id="formApprovalDate" class="form-control border-line"
-							placeholder="承認締め日" />
-					</div>
-					<div class="form-group mb-3">
-						<div th:if="${#fields.hasErrors('note')}"
-							class="alert alert-danger" role="alert">
-							<span th:errors="*{note}" class="error"></span>
-						</div>
-						<label>備考</label> <input type="text" th:field="*{note}"
-							id="formNote" class="form-control border-line" placeholder="備考" />
-					</div>
-					<div th:if="${fileError}" class="alert alert-danger" role="alert">
-						<span th:text="${fileError}"></span>
-					</div>
-					<label>ファイル</label> <input type="file" name="file"
-						class="form-control border-line" />
-					<div class="form-group">
-						<a th:href="@{/apply(page=${session.applyPage})}"
-							class="btn btn-dark">キャンセル</a> <input type="submit"
-							class="btn btn-dark" value="確認" />
-					</div>
-				</form>
-			</div>
-		</div>
+
+	<!-- 経費種別 -->
+	<div class="mb-3">
+		<label>経費種別（必須）</label>
+		<select id="keihisyubetu" class="form-select">
+			<option value="">選択してください</option>
+			<option value="1">旅費交通費</option>
+			<option value="2">備品費</option>
+		</select>
+		<div class="invalid-feedback">経費種別を選択してください。</div>
 	</div>
-	<!-- /.container -->
-	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+	<!-- 使用日 -->
+	<div class="mb-3">
+		<label>使用日（必須）</label>
+		<input id="siyoubi" type="text" class="form-control" placeholder="0000-00-00">
+		<div class="invalid-feedback"></div>
+	</div>
+
+	<!-- 出金額 -->
+	<div class="mb-3">
+		<label>出金額（必須）</label>
+		<input id="syukkingaku" type="text" class="form-control">
+		<div class="invalid-feedback">出金額を入力してください。</div>
+	</div>
+
+	<!-- 使途 -->
+	<div class="mb-3">
+		<label>使途・目的</label>
+		<input id="sitomokuteki" type="text" class="form-control">
+		<div class="invalid-feedback">使途目的は100文字以内で入力してください。</div>
+	</div>
+
+	<!-- 支払い先 -->
+	<div class="mb-3">
+		<label>支払い先</label>
+		<input id="siharaisaki" type="text" class="form-control">
+		<div class="invalid-feedback">支払い先は100文字以内で入力してください。</div>
+	</div>
+
+	<!-- 承認締め日 -->
+	<div class="mb-3">
+		<label>承認締め日（必須）</label>
+		<input id="syouninsimebi" type="text" class="form-control" placeholder="0000-00-00">
+		<div class="invalid-feedback"></div>
+	</div>
+
+	<!-- 備考 -->
+	<div class="mb-3">
+		<label>備考</label>
+		<input id="biko" type="text" class="form-control">
+		<div class="invalid-feedback">備考は100文字以内で入力してください。</div>
+	</div>
+
+	<!-- ファイル -->
+	<div class="mb-3">
+		<label>ファイル</label>
+		<input type="file" id="tenpu_file" class="form-control">
+		<div class="form-text">ファイルをドラッグ＆ドロップしてください</div>
+	</div>
+
+	<!-- ボタン -->
+	<div class="d-flex gap-2 mt-4">
+		<button type="button" class="btn btn-secondary">キャンセル</button>
+		<button type="submit" class="btn btn-secondary">登録</button>
+	</div>
+</form>
+</div>
+
+<script>
+const form = document.getElementById("applyForm");
+
+// キャンセル
+document.querySelector(".btn-secondary").addEventListener("click", function() {
+	window.location.href = "apply.html";
+});
+
+// 日付チェック
+function isDateFormat(value) {
+	return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+function setError(el, msg) {
+	el.classList.add("is-invalid");
+	if (msg !== undefined) {
+		el.nextElementSibling.textContent = msg;
+	}
+}
+
+function setOk(el) {
+	el.classList.remove("is-invalid");
+}
+
+// 登録
+form.addEventListener("submit", function(e) {
+
+	let ok = true;
+
+	const detail = document.getElementById("sinseinaiyou");
+	const expense = document.getElementById("keihisyubetu");
+	const siyoubi = document.getElementById("siyoubi");
+	const syukkingaku = document.getElementById("syukkingaku");
+	const sitomokuteki = document.getElementById("sitomokuteki");
+	const siharaisaki = document.getElementById("siharaisaki");
+	const syouninsimebi = document.getElementById("syouninsimebi");
+	const biko = document.getElementById("biko");
+
+	// 申請内容
+	if (detail.value === "") { setError(detail); ok = false; }
+	else setOk(detail);
+
+	// 経費種別
+	if (expense.value === "") { setError(expense); ok = false; }
+	else setOk(expense);
+
+	// 使用日
+	if (siyoubi.value === "") {
+		setError(siyoubi, "使用日を入力してください。");
+		ok = false;
+	} else if (!isDateFormat(siyoubi.value)) {
+		setError(siyoubi, "使用日は「0000-00-00」の形式で入力してください。");
+		ok = false;
+	} else {
+		setOk(siyoubi);
+	}
+
+	// 出金額
+	if (syukkingaku.value === "") { setError(syukkingaku); ok = false; }
+	else setOk(syukkingaku);
+
+	// 使途
+	if (sitomokuteki.value.length > 100) { setError(sitomokuteki); ok = false; }
+	else setOk(sitomokuteki);
+
+	// 支払い先
+	if (siharaisaki.value.length > 100) { setError(siharaisaki); ok = false; }
+	else setOk(siharaisaki);
+
+	// 承認締め日
+	if (syouninsimebi.value === "") {
+		setError(syouninsimebi, "承認締め日を入力してください。");
+		ok = false;
+	} else if (!isDateFormat(syouninsimebi.value)) {
+		setError(syouninsimebi, "承認締め日は「0000-00-00」の形式で入力してください。");
+		ok = false;
+	} else {
+		setOk(syouninsimebi);
+	}
+
+	// 備考
+	if (biko.value.length > 100) { setError(biko); ok = false; }
+	else setOk(biko);
+
+	// 入力エラーあり
+	if (!ok) {
+		e.preventDefault();
+		return;
+	}
+
+	// 入力エラーなし
+	e.preventDefault();
+	window.location.href = "applyRegisterDone.html";
+});
+
+// 入力時エラー解除
+document.querySelectorAll("input, select").forEach(el => {
+	el.addEventListener("input", function() {
+		this.classList.remove("is-invalid");
+	});
+});
+</script>
+
 </body>
 </html>
