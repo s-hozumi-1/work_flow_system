@@ -1,70 +1,190 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{parts/common :: html_head}"></head>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ユーザ登録</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+
 <body>
-	<div class="header-wrapper">
-	<header th:replace="~{parts/common :: page_header}"></header>	
+
+<div class="container mt-4">
+	<h2 class="mb-4">ユーザ登録</h2>
+
+<form id="userForm">
+
+	<!-- 氏名 -->
+	<div class="mb-3">
+		<label>氏名（必須）</label>
+		<input type="text" id="name" class="form-control">
+		<div class="invalid-feedback"></div>
 	</div>
-    <div class="container">
-        <h1>ユーザ登録</h1>
-        <div class="row">
-            <div class="row">
-                <form action="" th:object="${user}" method="post" class="col-md-12">
-                    <div class="form-group mb-3">
-						                       <div th:if="${#fields.hasErrors('employeeNumber')}" class="alert alert-danger" role="alert">
-                            <span th:errors="*{employeeNumber}" class="error"></span>
-                        </div>
-                        <label>社員番号(必須)</label>
-                        <input type="text" th:field="*{employeeNumber}" id="formName" class="form-control border-line" placeholder="社員番号"/>
-                    </div>
-                    <div class="form-group mb-3">
-                       <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger" role="alert">
-                            <span th:errors="*{name}" class="error"></span>
-                        </div>
-                        <label>氏名(必須)</label>
-                        <input type="text" th:field="*{name}" id="formName" class="form-control border-line" placeholder="氏名"/>
-                    </div>
-                    <div class="form-group mb-3">
-                        <div th:if="${#fields.hasErrors('loginId')}" class="alert alert-danger" role="alert">
-                            <span th:errors="*{loginId}" class="error"></span>
-                        </div>
-                        <label>ログインID(必須)</label>
-                        <input type="text" th:field="*{loginId}" id="formLoginId" class="form-control border-line" placeholder="ログインID"/>
-                    </div>
-                    <div class="form-group mb-3">
-                        <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger" role="alert">
-                            <span th:errors="*{password}" class="error"></span>
-                        </div>
-                        <label>パスワード(必須)</label>
-                        <input type="password" th:field="*{password}" id="formPassword" class="form-control border-line" placeholder="パスワード"/>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label>ユーザ種別(必須)</label>
-                        <select th:field="*{userType.code}" id="formUserType" class="form-control custom-select border-line">
-                            <option th:each="t : ${userTypeList}" th:value="${t.code}" th:text="${t.name}"></option>                
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label>所属グループ(必須)</label>
-                        <select th:field="*{department.code}" id="formDepartmentId" class="form-control custom-select border-line">
-                            <option th:each="d,depStat: ${departmentList}" th:value="${d.code}" th:text="${d.name}"th:if="${depStat.index < 3}"></option>
-                        </select>
-                    </div>
-                                        <div class="form-group mb-3">
-                        <label>支店(必須)</label>
-                        <select th:field="*{branch.code}" id="formbranchId" class="form-control custom-select border-line">
-                            <option th:each="b,brnStat: ${branchList}" th:value="${b.code}" th:text="${b.name}"th:if="${brnStat.index < 3}"></option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <a th:href="@{/user(page=${session.userPage})}"  class="btn btn-dark">キャンセル</a>
-                        <input type="submit" class="btn btn-dark" value="登録" />
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- /.container -->
-    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+	<!-- ログインID -->
+	<div class="mb-3">
+		<label>ログインID（必須）</label>
+		<input type="text" id="loginId" class="form-control">
+		<div class="invalid-feedback"></div>
+	</div>
+
+	<!-- パスワード -->
+	<div class="mb-3">
+		<label>パスワード（必須）</label>
+		<input type="password" id="password" class="form-control">
+		<div class="invalid-feedback"></div>
+	</div>
+
+	<!-- ユーザ種別 -->
+	<div class="mb-3">
+		<label>ユーザ種別（必須）</label>
+		<select id="userType" class="form-select">
+			<option value="">選択してください</option>
+			<option value="admin">管理者</option>
+			<option value="user">一般</option>
+		</select>
+		<div class="invalid-feedback">ユーザ種別を入力してください。</div>
+	</div>
+
+	<!-- 所属グループ -->
+	<div class="mb-3">
+		<label>所属グループ（必須）</label>
+		<select id="group" class="form-select">
+			<option value="">選択してください</option>
+			<option value="hr">人事部</option>
+			<option value="dev">開発部</option>
+			<option value="sales">営業部</option>
+		</select>
+		<div class="invalid-feedback">所属グループを入力してください。</div>
+	</div>
+
+	<!-- 支店 -->
+	<div class="mb-3">
+		<label>支店（必須）</label>
+		<select id="branch" class="form-select">
+			<option value="">選択してください</option>
+			<option value="tokyo">東京支店</option>
+			<option value="osaka">大阪支店</option>
+			<option value="nagoya">名古屋支店</option>
+		</select>
+		<div class="invalid-feedback">支店を入力してください。</div>
+	</div>
+
+	<!-- ボタン -->
+	<div class="d-flex gap-2 mt-4">
+		<button type="button" class="btn btn-secondary">キャンセル</button>
+		<button type="submit" class="btn btn-secondary">登録</button>
+	</div>
+
+</form>
+</div>
+
+<script>
+const form = document.getElementById("userForm");
+
+// キャンセル
+document.querySelector(".btn-secondary").addEventListener("click", function() {
+	window.location.href = "user.html";
+});
+
+const name = document.getElementById("name");
+const loginId = document.getElementById("loginId");
+const password = document.getElementById("password");
+const userType = document.getElementById("userType");
+const group = document.getElementById("group");
+const branch = document.getElementById("branch");
+
+// ダミー（重複チェック用）
+const existingLoginIds = ["admin", "test", "user01"];
+
+// エラー処理
+function setError(el, msg) {
+	el.classList.add("is-invalid");
+	el.nextElementSibling.textContent = msg;
+}
+
+function setOk(el) {
+	el.classList.remove("is-invalid");
+}
+
+// submit
+form.addEventListener("submit", function(e) {
+
+	let ok = true;
+
+	// 氏名
+	if (name.value === "") {
+		setError(name, "氏名を入力してください。");
+		ok = false;
+	} else if (name.value.length > 50) {
+		setError(name, "氏名は50文字以内で入力してください。");
+		ok = false;
+	} else {
+		setOk(name);
+	}
+
+	// ログインID
+	if (loginId.value === "") {
+		setError(loginId, "ログインIDを入力してください。");
+		ok = false;
+	} else if (loginId.value.length > 50) {
+		setError(loginId, "ログインIDは50文字以内で入力してください。");
+		ok = false;
+	} else if (existingLoginIds.includes(loginId.value)) {
+		setError(loginId, "このログインIDは既に使われています。");
+		ok = false;
+	} else {
+		setOk(loginId);
+	}
+
+	// パスワード
+	if (password.value === "") {
+		setError(password, "パスワードを入力してください。");
+		ok = false;
+	} else if (password.value.length > 100) {
+		setError(password, "パスワードは100文字以内で入力してください。");
+		ok = false;
+	} else {
+		setOk(password);
+	}
+
+	// ユーザ種別
+	if (userType.value === "") {
+		setError(userType, "ユーザ種別を入力してください。");
+		ok = false;
+	} else {
+		setOk(userType);
+	}
+	
+	// 所属グループ
+	if (group.value === "") {
+		setError(group, "所属グループを入力してください。");
+		ok = false;
+	} else {
+		setOk(group);
+	}
+	
+	// 支店
+	if (branch.value === "") {
+		setError(branch, "支店を入力してください。");
+		ok = false;
+	} else {
+		setOk(branch);
+	}
+
+	// NGなら止める
+	if (!ok) {
+		e.preventDefault();
+		return;
+	}
+
+	// OKなら遷移（仮）
+	e.preventDefault();
+	window.location.href = "userRegisterDone.html";
+});
+
+</script>
+
 </body>
 </html>
