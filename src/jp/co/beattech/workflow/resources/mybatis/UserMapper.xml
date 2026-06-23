@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.beattech.workflow.java.app.mapper.UserMapper">
+
+
+	<sql id="joinSelect">
+		SELECT
+		users.employee_number,
+		users.login_id,
+		users.password,
+		users.name,
+		users.user_cd,
+		users.department_cd,
+		users.branch_cd,
+		users.registered,
+		users.del_flg,
+		user_type_mst.type AS userType_type,
+		user_type_mst.category AS userType_category,
+		user_type_mst.code AS
+		userType_code,
+		user_type_mst.name AS userType_name,
+		department_mst.type
+		AS department_type,
+		department_mst.category AS department_category,
+		department_mst.code AS department_code,
+		department_mst.name AS
+		department_name,
+		branch_mst.type AS branch_type,
+		branch_mst.category AS
+		branch_category,
+		branch_mst.code AS branch_code,
+		branch_mst.name AS
+		branch_name
+		FROM users
+		LEFT JOIN mst_code user_type_mst
+		ON users.user_cd = user_type_mst.code AND
+		user_type_mst.type = 'user_type'
+		LEFT JOIN mst_code department_mst
+		ON users.department_cd =
+		department_mst.code AND department_mst.type = 'department'
+		LEFT JOIN mst_code branch_mst
+		ON users.branch_cd = branch_mst.code AND
+		branch_mst.type = 'branch'
+	</sql>
+
+
+	<resultMap id="UserMap" type="jp.co.beattech.workflow.java.app.domain.User">
+		<id column="employee_number" property="employeeNumber" />
+		<result column="login_id" property="loginId" />
+		<result column="password" property="password" />
+		<result column="name" property="name" />
+		<result column="registered" property="registered" />
+		<result column="del_flg" property="delFlg" />
+		<association property="userType"
+			javaType="jp.co.beattech.workflow.java.app.domain.MstCode">
+			<result column="userType_type" property="type" />
+			<result column="userType_category" property="category" />
+			<result column="userType_code" property="code" />
+			<result column="userType_name" property="name" />
+		</association>
+
+		<association property="department"
+			javaType="jp.co.beattech.workflow.java.app.domain.MstCode">
+			<result column="department_type" property="type" />
+			<result column="department_category" property="category" />
+			<result column="department_code" property="code" />
+			<result column="department_name" property="name" />
+		</association>
+
+		<association property="branch"
+			javaType="jp.co.beattech.workflow.java.app.domain.MstCode">
+			<result column="branch_type" property="type" />
+			<result column="branch_category" property="category" />
+			<result column="branch_code" property="code" />
+			<result column="branch_name" property="name" />
+		</association>
+	</resultMap>
+
+
+	<select id="selectAll" resultMap="UserMap">
+		<include refid="joinSelect"></include>
+		ORDER BY users.employeeNumber desc
+	</select>
+
+	<select id="selectByEmployeeNumber" parameterType="Integer"
+		resultMap="UserMap">
+		<include refid="joinSelect"></include>
+		WHERE users.employee_number = #{employeeNumber}
+	</select>
+
+	<insert id="insert" parameterType="jp.co.beattech.workflow.java.app.domain.User">
+		INSERT INTO users
+		(employee_number,name,
+		login_id, password, user_cd, department_cd,
+		branch_cd, registered)
+		VALUES
+		(#{employeeNumber},#{name}, #{loginId},
+		#{password}, #{userType.code}, #{department.code}, #{branch.code},
+		now())
+	</insert>
+
+	<update id="update" parameterType="jp.co.beattech.workflow.java.app.domain.User">
+		UPDATE users
+		SET name =
+		#{name}, login_id = #{loginId}, password = #{password},
+		user_cd =
+		#{userType.code}, department_cd = #{department.code}, branch_cd =
+		#{branch.code}
+		WHERE employee_number = #{employeeNumber}
+	</update>
+	
+	<update id="delete" parameterType="jp.co.beattech.workflow.java.app.domain.User">
+		UPDATE users
+		SET del_flg =
+		#{delFlg}
+		WHERE employee_number = #{employeeNumber}
+	</update>
+
+	<select id="selectLimited" resultMap="UserMap">
+		<include refid="joinSelect"></include>
+		ORDER BY users.id desc
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<select id="count" resultType="long">
+		SELECT COUNT(*) FROM users
+	</select>
+
+
+</mapper> 

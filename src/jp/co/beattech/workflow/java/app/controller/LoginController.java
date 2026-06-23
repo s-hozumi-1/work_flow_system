@@ -1,5 +1,8 @@
 package jp.co.beattech.workflow.java.app.controller;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,9 +13,6 @@ import jp.co.beattech.workflow.java.app.domain.LoginUser;
 import jp.co.beattech.workflow.java.app.domain.UserInfo;
 import jp.co.beattech.workflow.java.app.service.LoginService;
 import jp.co.beattech.workflow.java.app.service.UserInfoService;
-
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -37,7 +37,7 @@ public class LoginController {
 		return "login/login";
 	}
 	
-	@PostMapping
+	@PostMapping("/")
 	public String login(@Valid LoginUser loginUser, Errors errors) {
 		
 		if (errors.hasErrors()) {			
