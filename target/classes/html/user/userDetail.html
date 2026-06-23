@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ユーザ詳細</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+
+<body>
+
+<div class="container mt-4">
+	<h2 class="mb-4">ユーザ詳細</h2>
+
+	<table class="table user-detail-table">
+		<tbody>
+			<tr>
+				<th>社員番号</th>
+				<td>101</td>
+			</tr>
+			<tr>
+				<th>氏名</th>
+				<td>山田 太郎</td>
+			</tr>
+			<tr>
+				<th>ログインID</th>
+				<td>yamada01</td>
+			</tr>
+			<tr>
+				<th>所属グループ</th>
+				<td>営業部</td>
+			</tr>
+			<tr class="no-border">
+				<th>支店</th>
+				<td>東京支店</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- ボタン -->
+	<div class="d-flex gap-2 mt-4">
+		<a href="user.html" class="btn btn-secondary">一覧に戻る</a>
+		<a href="userEdit.html?id=101" class="btn btn-secondary">編集</a>
+		<button class="btn btn-secondary" onclick="deleteUser()">削除</button>
+	</div>
+
+</div>
+
+<script>
+function deleteUser() {
+	if (confirm("本当に削除してよろしいですか？")) {
+		// OK押下
+		window.location.href = "userDeleteDone.html";
+	} else {
+		// キャンセル押下（何もしない）
+		return;
+	}
+}
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
